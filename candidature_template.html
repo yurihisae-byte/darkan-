@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Candidature - Akira Kurogiri</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Cinzel:wght@600;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Nunito',sans-serif; min-height:100vh; color:#e8eaf6; overflow-x:hidden; }
+
+#bg-canvas { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+.wrapper { position:relative; z-index:2; max-width:1180px; margin:0 auto; padding:3rem 1.5rem 11rem; }
+
+.header { text-align:center; margin-bottom:2.5rem; }
+.header,.tabs { max-width:900px; margin-left:auto; margin-right:auto; }
+.header-name { font-family:'Cinzel',serif; font-weight:900; font-size:clamp(1.6rem,5vw,3rem); letter-spacing:0.1em; color:#fff; text-shadow:0 0 40px rgba(150,150,255,0.3); margin-bottom:0.8rem; }
+.header-name .clan { color:var(--accent,#a0a0ff); }
+.header-quote { max-width:720px; margin:0 auto; font-size:0.95rem; line-height:1.7; color:rgba(220,220,255,0.55); font-style:italic; }
+.header-author { display:block; margin-top:0.45rem; color:rgba(220,220,255,0.35); font-style:normal; font-weight:800; letter-spacing:0.08em; }
+
+.tabs { display:flex; flex-wrap:wrap; gap:0.4rem; background:rgba(0,0,0,0.25); border-radius:12px; padding:0.5rem; margin-bottom:2rem; backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.07); }
+.tab-btn { flex:1; min-width:120px; padding:0.7rem 0.8rem; background:transparent; border:none; border-radius:8px; font-family:'Nunito',sans-serif; font-size:0.78rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase; color:rgba(220,220,255,0.45); cursor:pointer; transition:all 0.3s; text-align:center; }
+.tab-btn:hover { color:rgba(220,220,255,0.75); background:rgba(255,255,255,0.05); }
+.tab-btn.active { background:rgba(255,255,255,0.12); color:#fff; box-shadow:0 2px 12px rgba(0,0,0,0.3); }
+
+.panel { display:none; animation:panelIn 0.4s ease; }
+.panel.active { display:block; }
+@keyframes panelIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+.panel-layout { display:grid; grid-template-columns:minmax(190px,260px) minmax(0,1fr); gap:1.4rem; align-items:start; }
+.category-image { position:sticky; top:1.5rem; min-height:320px; border:1px solid rgba(255,255,255,0.08); border-radius:16px; overflow:hidden; background:rgba(10,8,22,0.32); backdrop-filter:blur(10px); box-shadow:0 18px 48px rgba(0,0,0,0.24); }
+.category-image img { width:100%; height:100%; min-height:320px; object-fit:cover; display:block; filter:saturate(0.9) contrast(1.08); opacity:0.9; }
+.category-image::after { content:''; position:absolute; inset:0; background:linear-gradient(180deg,rgba(10,8,22,0.05),rgba(10,8,22,0.45)); pointer-events:none; }
+
+.section-card { background:rgba(15,10,30,0.55); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:2rem; backdrop-filter:blur(12px); margin-bottom:1.2rem; }
+.section-card-title { font-family:'Cinzel',serif; font-size:clamp(1.25rem,3vw,1.8rem); font-weight:900; color:#fff; margin-bottom:1.5rem; letter-spacing:0.06em; }
+.section-card-title span { color:var(--accent,#a0a0ff); }
+
+.info-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+.info-box { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:10px; padding:1rem 1.2rem; }
+.info-box.wide { grid-column:1/-1; }
+.info-label { font-size:0.65rem; font-weight:800; letter-spacing:3px; text-transform:uppercase; color:rgba(220,220,255,0.4); margin-bottom:0.4rem; display:block; }
+.info-val { font-size:1rem; font-weight:700; color:#fff; }
+.info-val.accent { color:var(--accent,#a0a0ff); }
+
+.lore-p { font-size:1rem; color:rgba(220,220,255,0.65); line-height:1.95; margin-bottom:1.2rem; }
+.lore-p:last-child { margin-bottom:0; }
+.lore-sep { display:flex; align-items:center; gap:1rem; margin:1.2rem 0; }
+.lore-sep::before,.lore-sep::after { content:''; flex:1; height:1px; background:rgba(255,255,255,0.08); }
+.lore-sep span { color:rgba(220,220,255,0.2); font-size:0.7rem; }
+
+.trait-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; }
+.trait-box { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1.2rem; }
+.trait-title { display:block; color:var(--accent,#a0a0ff); font-weight:900; letter-spacing:0.12em; text-transform:uppercase; margin-bottom:0.7rem; }
+.trait-list { display:grid; gap:0.55rem; list-style:none; color:rgba(220,220,255,0.62); line-height:1.6; }
+.trait-list li::before { content:'- '; color:var(--accent,#a0a0ff); font-weight:900; }
+.character-list { display:grid; gap:0.8rem; }
+.character-item { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:1rem 1.15rem; }
+.character-name { display:block; color:var(--accent,#a0a0ff); font-size:0.8rem; font-weight:900; letter-spacing:0.14em; text-transform:uppercase; margin-bottom:0.45rem; }
+.character-text { color:rgba(220,220,255,0.64); line-height:1.75; font-size:0.95rem; }
+
+.obj-item { display:flex; gap:1.2rem; align-items:flex-start; padding:1.2rem 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+.obj-item:last-child { border-bottom:none; }
+.obj-num { font-family:'Cinzel',serif; font-size:1.6rem; font-weight:900; color:rgba(255,255,255,0.08); min-width:40px; line-height:1; }
+.obj-title { font-size:0.8rem; font-weight:900; letter-spacing:2px; text-transform:uppercase; color:rgba(220,220,255,0.75); margin-bottom:0.4rem; display:block; }
+.obj-desc { font-size:0.95rem; color:rgba(220,220,255,0.48); line-height:1.75; }
+.obj-list { display:grid; gap:0.55rem; color:rgba(220,220,255,0.56); line-height:1.7; list-style:none; }
+.obj-list li::before { content:'- '; color:var(--accent,#a0a0ff); font-weight:900; }
+
+.color-switcher { position:fixed; bottom:2rem; right:2rem; z-index:100; display:flex; flex-direction:column; gap:0.5rem; align-items:center; }
+.switcher-label { font-family:'Cinzel',serif; font-size:0.38rem; letter-spacing:3px; color:rgba(255,255,255,0.2); text-transform:uppercase; margin-bottom:0.3rem; writing-mode:vertical-rl; }
+.color-dot { width:14px; height:14px; border-radius:50%; cursor:pointer; border:2px solid rgba(255,255,255,0.2); transition:transform 0.2s,border-color 0.2s; }
+.color-dot:hover { transform:scale(1.3); }
+.color-dot.active { border-color:#fff; transform:scale(1.2); }
+
+.music-player { position:fixed; left:1.2rem; bottom:1.2rem; z-index:120; width:min(360px,calc(100vw - 2.4rem)); background:rgba(10,8,22,0.78); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:0.9rem; backdrop-filter:blur(14px); box-shadow:0 16px 40px rgba(0,0,0,0.32); }
+.music-top { display:flex; align-items:center; justify-content:space-between; gap:0.8rem; margin-bottom:0.7rem; }
+.music-title { min-width:0; }
+.music-label { display:block; font-size:0.58rem; font-weight:800; letter-spacing:2px; text-transform:uppercase; color:rgba(220,220,255,0.42); margin-bottom:0.2rem; }
+.music-name { display:block; color:#fff; font-size:0.9rem; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.music-toggle { flex-shrink:0; border:none; border-radius:999px; padding:0.55rem 0.9rem; background:var(--accent,#a0a0ff); color:#0b0a18; font-family:'Nunito',sans-serif; font-weight:900; cursor:pointer; transition:transform 0.2s,filter 0.2s; }
+.music-toggle:hover { transform:translateY(-1px); filter:brightness(1.08); }
+.music-controls { display:flex; gap:0.45rem; margin-bottom:0.7rem; }
+.music-btn { flex:1; border:1px solid rgba(255,255,255,0.09); border-radius:9px; padding:0.5rem 0.55rem; background:rgba(255,255,255,0.06); color:rgba(230,230,255,0.65); font-family:'Nunito',sans-serif; font-size:0.78rem; font-weight:800; cursor:pointer; transition:background 0.2s,color 0.2s,border-color 0.2s; }
+.music-btn:hover,.music-btn.active { background:rgba(255,255,255,0.13); color:#fff; border-color:rgba(255,255,255,0.18); }
+.music-bottom { display:flex; align-items:center; gap:0.7rem; }
+.music-mini-btn { width:34px; height:30px; border:none; border-radius:8px; background:rgba(255,255,255,0.08); color:#fff; font-weight:900; cursor:pointer; }
+.volume-wrap { flex:1; display:flex; align-items:center; gap:0.5rem; color:rgba(220,220,255,0.45); font-size:0.76rem; font-weight:800; }
+.volume-slider { width:100%; accent-color:var(--accent,#a0a0ff); cursor:pointer; }
+
+@media(max-width:650px){
+  .wrapper { padding:2rem 1rem 12rem; }
+  .panel-layout { grid-template-columns:1fr; }
+  .category-image { position:relative; top:auto; min-height:220px; }
+  .category-image img { min-height:220px; max-height:280px; }
+  .info-grid,.trait-grid { grid-template-columns:1fr; }
+  .music-player { left:0.8rem; bottom:0.8rem; }
+  .color-switcher { bottom:1rem; right:0.9rem; }
+}
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+
+<main class="wrapper">
+  <header class="header">
+    <div class="header-name">Kota <span class="clan">KUROGIRI</span></div>
+    <div class="header-quote">
+      « Ils respectaient son père. Ils obéiront à son fils. »
+      <span class="header-author">— Kota Kurogiri</span>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Categories">
+    <button class="tab-btn active" type="button" onclick="switchTab('general',this)">IMFORMATION GENERAL</button>
+    <button class="tab-btn" type="button" onclick="switchTab('histoire',this)">HISTOIRE</button>
+    <button class="tab-btn" type="button" onclick="switchTab('description',this)">description</button>
+    <button class="tab-btn" type="button" onclick="switchTab('caractere',this)">Caractère</button>
+    <button class="tab-btn" type="button" onclick="switchTab('qualites',this)">Qualités/Défauts</button>
+    <button class="tab-btn" type="button" onclick="switchTab('objectifs',this)">Objectifs</button>
+  </nav>
+
+  <section class="panel active" id="panel-general">
+    <div class="panel-layout">
+      <aside class="category-image">
+        <img src="Kota presentation.png" alt="Image information general">
+      </aside>
+    <div class="section-card">
+      <h2 class="section-card-title"><span>IMFORMATION</span> GENERAL</h2>
+      <div class="info-grid">
+        <div class="info-box">
+          <span class="info-label">Nom complet</span>
+          <div class="info-val">Kota Kurogiri</div>
+        </div>
+        <div class="info-box">
+          <span class="info-label">Clan</span>
+          <div class="info-val accent">Kurogiri</div>
+        </div>
+        <div class="info-box">
+          <span class="info-label">Statut</span>
+          <div class="info-val">Fils de Akira Kurogiri</div>
+        </div>
+        <div class="info-box">
+          <span class="info-label">Age</span>
+          <div class="info-val">Apparence de 15ans</div>
+        </div>
+        <div class="info-box wide">
+          <span class="info-label">Résumé</span>
+          <div class="info-val" style="font-weight:400;font-size:0.95rem;color:rgba(220,220,255,0.65);">
+            c'est le fils de akira qui pratiquement la même vision que sont père
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-histoire">
+    <div class="panel-layout">
+      <aside class="category-image">
+        <img src="Kota Histoire.png" alt="Image histoire">
+      </aside>
+    <div class="section-card">
+      <h2 class="section-card-title"><span>HISTOIRE</span></h2>
+      <p class="lore-p">Kota Kurogiri est le fils unique d'Akira Kurogiri.
+
+Dès sa naissance, les fléaux ressentaient quelque chose d'anormal en sa présence. Là où Akira inspirait le respect, Kota inspirait l'obéissance. Même les malédictions les plus agressives devenaient étrangement calmes lorsqu'il se trouvait à proximité.
+</p>
+      <div class="lore-sep"><span>*</span></div>
+      <p class="lore-p">Son père l'éleva loin du monde humain, au sein des sanctuaires secrets créés pour les fléaux instruits. Très jeune, il apprit l'histoire du Clan Kurogiri, le pacte de Sukuna et la véritable raison de l'existence de sa famille.</p>
+      <div class="lore-sep"><span>*</span></div>
+      <p class="lore-p">À l'âge de quinze ans, lorsqu'il atteignit l'âge mentionné dans la prophétie du clan, il commença à entendre une voix résonner dans son esprit. Ce n'était pas encore Sukuna, mais un écho de sa volonté ancienne, enfoui dans le sang des Kurogiri.À douze ans, il assista à un massacre provoqué par une guerre entre exorcistes et malédictions. Ce jour-là, il perdit plusieurs amis appartenant aux deux camps.
+
+Cet événement brisa définitivement sa foi envers les idéaux de son père.</p>
+      <div class="lore-sep"><span>*</span></div>
+      <p class="lore-p">À l'âge de quinze ans, le même âge où Akira entendit l'écho de Sukuna pour la première fois, Kota commença à faire des rêves étranges. Chaque nuit, il voyait un immense temple couvert de brume noire. Une silhouette assise sur un trône l'observait sans jamais parler.</p>
+      <div class="lore-sep"><span>*</span></div>
+      <p class="lore-p">Au fil des années, les rêves devinrent plus fréquents.
+
+Contrairement à son père qui avait dû bâtir son influence progressivement, Kota grandit dans un empire déjà construit par Akira. Il étudia la stratégie, la politique, la manipulation des humains et la gestion des communautés de fléaux.</p>
+      <div class="lore-sep"><span>*</span></div>
+      <p class="lore-p">Mais il remarqua rapidement un problème.
+
+Les fléaux que son père avait sauvés étaient devenus dépendants de lui.
+
+Akira avait créé une société capable de survivre.
+
+Kota voulait créer une société capable de dominer.</p>
+      <div class="lore-sep"><span>*</span></div>
+      <p class="lore-p">Il commença alors à réorganiser les réseaux fondés par son père. Il forma des élites parmi les malédictions les plus talentueuses, développa des systèmes d'entraînement et créa des alliances secrètes jusque dans certaines familles d'exorcistes corrompues.</p>
+      <div class="lore-sep"><span>*</span></div>
+      <p class="lore-p">Là où Akira préparait le monde pour l'arrivée de Sukuna, Kota préparait l'arrivée de quelque chose de plus grand encore :
+
+L'avènement d'un nouvel ordre où humains, exorcistes et fléaux seraient forcés de reconnaître la suprématie des Kurogiri. </p>
+    </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-description">
+    <div class="panel-layout">
+      <aside class="category-image">
+        <img src="Kota Description.png" alt="Image description">
+      </aside>
+    <div class="section-card">
+      <h2 class="section-card-title"><span>description</span></h2>
+      <p class="lore-p">Kota Kurogiri est le fils unique d'Akira Kurogiri et l'héritier du Clan Kurogiri. Né avec une aura qui inspire naturellement l'obéissance aux fléaux, il a grandi au sein des sanctuaires secrets de son père, où il a appris la stratégie, la politique et les secrets du monde occulte. Contrairement à Akira, qui cherchait à assurer la survie des fléaux, Kota ambitionne de bâtir un ordre nouveau où humains, exorcistes et malédictions reconnaîtront la suprématie des Kurogiri. Calme, intelligent et extrêmement ambitieux, il prépare dans l'ombre l'avènement d'une ère dominée par sa vision.</p>
+    </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-caractere">
+    <div class="panel-layout">
+      <aside class="category-image">
+        <img src="Kota caractère.png" alt="Image caractere">
+      </aside>
+    <div class="section-card">
+      <h2 class="section-card-title"><span>Caractère</span></h2>
+      <div class="character-list">
+        <div class="character-item">
+          <span class="character-name">Calme</span>
+          <p class="character-text">Kota est un homme calme, froid et extrêmement sûr de lui. Il a grandi en sachant qu'il était destiné à accomplir quelque chose de grand, ce qui lui a donné une présence naturelle et une confiance presque inébranlable. </p>
+        </div>
+        <div class="character-item">
+          <span class="character-name">Intelligent</span>
+          <p class="character-text">Contrairement aux dirigeants qui imposent leur autorité par la peur, Kota inspire instinctivement l'obéissance.</p>
+        </div>
+        <div class="character-item">
+          <span class="character-name">Charismatique</span>
+          <p class="character-text">Il ne se considère pas comme un tyran, mais comme quelqu'un qui doit guider le monde vers un ordre supérieur. </p>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-qualites">
+    <div class="panel-layout">
+      <aside class="category-image">
+        <img src="Kota qualité.png" alt="Image qualites et defauts">
+      </aside>
+    <div class="section-card">
+      <h2 class="section-card-title"><span>Qualités</span>/Défauts</h2>
+      <div class="trait-grid">
+        <div class="trait-box">
+          <span class="trait-title">Qualités</span>
+          <ul class="trait-list">
+            <li>Ambitieux (Il ne se contente jamais de préserver ce qui existe déjà. Il cherche constamment à améliorer, développer et renforcer son influence.)</li>
+            <li>Patient (Il est capable d'attendre des années pour que ses plans portent leurs fruits.) </li>
+            <li>Intelligent et cultivé (Ayant étudié la politique, la stratégie et les traditions occultes depuis son enfance, il possède une vaste connaissance du monde.)</li>
+          </ul>
+        </div>
+        <div class="trait-box">
+          <span class="trait-title">Défauts</span>
+          <ul class="trait-list">
+            <li>Orgueilleux (Il est convaincu que sa vision est supérieure à celle de la plupart des gens.) </li>
+            <li>Froid émotionnellement (Il exprime rarement ses sentiments et peut sembler distant même avec ses proches.) </li>
+            <li>Obsession du contrôle (Il déteste l'imprévu et cherche toujours à maîtriser chaque situation.)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <section class="panel" id="panel-objectifs">
+    <div class="panel-layout">
+      <aside class="category-image">
+        <img src="Kota Objectif.png" alt="Image objectifs">
+      </aside>
+    <div class="section-card">
+      <h2 class="section-card-title"><span>Objectifs</span></h2>
+      <div class="obj-item">
+        <div class="obj-num">01</div>
+        <div>
+          <span class="obj-title">Objectifs à Court Terme</span>
+          <ul class="obj-list">
+            <li>Renforcer son influence au sein des communautés de fléaux créées par son père.</li>
+            <li>Identifier et recruter les malédictions les plus prometteuses pour former une élite.</li>
+            <li>Développer de nouvelles méthodes d'entraînement afin de rendre les fléaux plus disciplinés et moins dépendants d'Akira.</li>
+            <li>Étudier les rêves du temple de brume noire pour comprendre leur véritable signification.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-num">02</div>
+        <div>
+          <span class="obj-title">Objectifs à Moyen Terme</span>
+          <ul class="obj-list">
+            <li>Étendre l'influence des Kurogiri dans le monde humain et le monde occulte.</li>
+            <li>Découvrir les secrets cachés du pacte de Sukuna et le rôle exact du Clan Kurogiri dans cette prophétie.</li>
+            <li>Faire reconnaître son autorité comme successeur légitime d'Akira.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-num">03</div>
+        <div>
+          <span class="obj-title">Objectifs à Long Terme</span>
+          <ul class="obj-list">
+            <li>Mettre fin à la domination des grands clans d'exorcistes sur le monde occulte.</li>
+            <li>Préparer le monde à l'accomplissement de la prophétie liée à Sukuna.</li>
+            <li>Créer un nouvel ordre où humains, exorcistes et fléaux devront respecter l'autorité du Clan Kurogiri.</li>
+            <li>Dépasser l'héritage de son père et devenir le plus grand dirigeant de l'histoire des Kurogiri.</li>
+            <li>Découvrir la vérité derrière la silhouette qui apparaît dans ses rêves et comprendre son lien avec son destin.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+</main>
+
+<div class="color-switcher">
+  <span class="switcher-label">Thème</span>
+  <div class="color-dot active" style="background:#5050cc" onclick="setTheme(0)" title="Violet"></div>
+  <div class="color-dot" style="background:#2d6a2d" onclick="setTheme(1)" title="Vert"></div>
+  <div class="color-dot" style="background:#1a2a5a" onclick="setTheme(2)" title="Bleu"></div>
+  <div class="color-dot" style="background:#5a1a1a" onclick="setTheme(3)" title="Rouge"></div>
+  <div class="color-dot" style="background:#1a4a4a" onclick="setTheme(4)" title="Cyan"></div>
+  <div class="color-dot" style="background:#5a3a10" onclick="setTheme(5)" title="Or"></div>
+</div>
+
+<div class="music-player">
+  <audio id="music-audio" preload="metadata"></audio>
+  <div class="music-top">
+    <div class="music-title">
+      <span class="music-label">Musique</span>
+      <span class="music-name" id="music-name">Aucune musique lancee</span>
+    </div>
+    <button class="music-toggle" id="music-toggle" type="button">Play</button>
+  </div>
+  <div class="music-controls">
+    <button class="music-btn active" type="button" onclick="setTrack(0)">THEMES 1</button>
+    <button class="music-btn" type="button" onclick="setTrack(1)">THEMES 2</button>
+    <button class="music-btn" type="button" onclick="setTrack(2)">THEMES 3</button>
+    <button class="music-btn" type="button" onclick="setTrack(2)">ost chill</button>
+  </div>
+  <div class="music-bottom">
+    <button class="music-mini-btn" type="button" onclick="previousTrack()" title="Musique precedente">&lt;</button>
+    <button class="music-mini-btn" type="button" onclick="nextTrack()" title="Musique suivante">&gt;</button>
+    <label class="volume-wrap">
+      Son
+      <input class="volume-slider" id="music-volume" type="range" min="0" max="100" value="45">
+    </label>
+  </div>
+</div>
+
+<script>
+function switchTab(id, btn){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+const musicTracks = [
+  { title:'OST 1', file:'OST1.mp3' },
+  { title:'OST 2', file:'OST2.mp3' },
+  { title:'OST 3', file:'OST3.mp3' },
+  { title:'OST chill', file:'ost chill.mp3' },
+];
+
+const musicAudio = document.getElementById('music-audio');
+const musicName = document.getElementById('music-name');
+const musicToggle = document.getElementById('music-toggle');
+const musicVolume = document.getElementById('music-volume');
+let currentTrack = 0;
+
+function refreshMusicButtons(){
+  document.querySelectorAll('.music-btn').forEach((btn,i)=>btn.classList.toggle('active',i===currentTrack));
+}
+
+function loadTrack(i, shouldPlay){
+  currentTrack = (i + musicTracks.length) % musicTracks.length;
+  const track = musicTracks[currentTrack];
+  musicAudio.src = track.file;
+  musicName.textContent = track.title;
+  refreshMusicButtons();
+  if(shouldPlay) playMusic();
+}
+
+function playMusic(){
+  musicAudio.play().then(()=>{
+    musicToggle.textContent = 'Pause';
+  }).catch(()=>{
+    musicToggle.textContent = 'Play';
+  });
+}
+
+function pauseMusic(){
+  musicAudio.pause();
+  musicToggle.textContent = 'Play';
+}
+
+function toggleMusic(){
+  if(musicAudio.paused) playMusic();
+  else pauseMusic();
+}
+
+function setTrack(i){
+  const wasPlaying = !musicAudio.paused;
+  loadTrack(i, wasPlaying);
+}
+
+function nextTrack(){
+  loadTrack(currentTrack + 1, !musicAudio.paused);
+}
+
+function previousTrack(){
+  loadTrack(currentTrack - 1, !musicAudio.paused);
+}
+
+musicToggle.addEventListener('click',toggleMusic);
+musicVolume.addEventListener('input',()=>{ musicAudio.volume = musicVolume.value / 100; });
+musicAudio.addEventListener('ended',()=>loadTrack(currentTrack + 1,true));
+musicAudio.addEventListener('pause',()=>{ musicToggle.textContent = 'Play'; });
+musicAudio.addEventListener('play',()=>{ musicToggle.textContent = 'Pause'; });
+musicAudio.volume = musicVolume.value / 100;
+loadTrack(0,false);
+
+const themes = [
+  { r:80,  g:80,  b:200, name:'Violet', effect:'storm' },
+  { r:40,  g:160, b:40,  name:'Vert',   effect:'wind'  },
+  { r:40,  g:80,  b:200, name:'Bleu',   effect:'ocean' },
+  { r:200, g:40,  b:40,  name:'Rouge',  effect:'fire'  },
+  { r:20,  g:180, b:180, name:'Cyan',   effect:'mist'  },
+  { r:200, g:150, b:20,  name:'Or',     effect:'gold'  },
+];
+
+let currentTheme = 0;
+
+function setTheme(i){
+  currentTheme = i;
+  document.querySelectorAll('.color-dot').forEach((d,j)=>d.classList.toggle('active',j===i));
+  const {r,g,b} = themes[i];
+  document.documentElement.style.setProperty('--accent', `rgb(${Math.min(r+80,255)},${Math.min(g+80,255)},${Math.min(b+80,255)})`);
+}
+
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W,H,t=0;
+function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resize(); window.addEventListener('resize',resize);
+
+function rand(a,b){ return Math.random()*(b-a)+a; }
+
+class Particle{
+  constructor(){ this.reset(true); }
+  reset(init){
+    const effect = themes[currentTheme].effect;
+    this.effect=effect;
+    this.life=1;
+    this.spin=rand(0,Math.PI*2);
+
+    if(effect === 'fire'){
+      this.x=rand(0,W); this.y=init?rand(H*0.35,H):H+10;
+      this.s=rand(1.2,4.2); this.sy=-rand(0.7,2.2); this.sx=rand(-0.45,0.45);
+      this.a=rand(0.2,0.65); this.decay=rand(0.004,0.012); this.h=rand(10,28);
+    }else if(effect === 'wind'){
+      this.x=init?rand(0,W):-80; this.y=rand(0,H);
+      this.s=rand(45,140); this.sy=rand(-0.12,0.12); this.sx=rand(1.6,4.4);
+      this.a=rand(0.04,0.16); this.decay=rand(0.0008,0.0025);
+    }else if(effect === 'ocean'){
+      this.x=rand(0,W); this.y=init?rand(H*0.35,H):H+12;
+      this.s=rand(1.5,5.5); this.sy=-rand(0.15,0.65); this.sx=rand(-0.25,0.25);
+      this.a=rand(0.06,0.24); this.decay=rand(0.001,0.004);
+    }else if(effect === 'storm'){
+      this.x=rand(0,W); this.y=init?rand(0,H):H+5;
+      this.s=rand(0.8,2.6); this.sy=rand(0.25,0.9); this.sx=rand(-0.2,0.2);
+      this.a=rand(0.06,0.28); this.decay=rand(0.001,0.004);
+    }else if(effect === 'gold'){
+      this.x=rand(0,W); this.y=init?rand(0,H):H+5;
+      this.s=rand(1,3.4); this.sy=-rand(0.15,0.75); this.sx=rand(-0.35,0.35);
+      this.a=rand(0.12,0.42); this.decay=rand(0.0015,0.006);
+    }else{
+      this.x=rand(0,W); this.y=init?rand(0,H):H+5;
+      this.s=rand(12,44); this.sy=-rand(0.03,0.18); this.sx=rand(-0.18,0.18);
+      this.a=rand(0.015,0.06); this.decay=rand(0.0006,0.002);
+    }
+  }
+  update(){
+    if(this.effect !== themes[currentTheme].effect) this.reset(true);
+    this.spin+=0.02;
+    this.x+=this.sx + Math.sin(t*2+this.spin)*0.12;
+    this.y+=this.sy;
+    this.life-=this.decay;
+    if(this.x>W+150||this.x<-150||this.y<-80||this.y>H+80||this.life<=0)this.reset(false);
+  }
+  draw(){
+    const theme=themes[currentTheme];
+    const {r,g,b}=theme;
+    const alpha=this.a*this.life;
+
+    if(theme.effect === 'fire'){
+      const grd=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.h);
+      grd.addColorStop(0,`rgba(255,220,120,${alpha})`);
+      grd.addColorStop(0.55,`rgba(255,80,35,${alpha*0.6})`);
+      grd.addColorStop(1,'rgba(255,40,20,0)');
+      ctx.fillStyle=grd;
+      ctx.beginPath(); ctx.ellipse(this.x,this.y,this.s,this.h,0,0,Math.PI*2); ctx.fill();
+    }else if(theme.effect === 'wind'){
+      ctx.strokeStyle=`rgba(${r+60},${Math.min(g+80,255)},${b+60},${alpha})`;
+      ctx.lineWidth=rand(0.6,1.5);
+      ctx.beginPath();
+      ctx.moveTo(this.x,this.y);
+      ctx.quadraticCurveTo(this.x+this.s*0.45,this.y+Math.sin(t+this.spin)*18,this.x+this.s,this.y+Math.sin(t+this.spin)*8);
+      ctx.stroke();
+    }else if(theme.effect === 'gold'){
+      ctx.save();
+      ctx.translate(this.x,this.y);
+      ctx.rotate(this.spin);
+      ctx.strokeStyle=`rgba(255,230,130,${alpha})`;
+      ctx.lineWidth=1.2;
+      ctx.beginPath();
+      ctx.moveTo(-this.s,0); ctx.lineTo(this.s,0);
+      ctx.moveTo(0,-this.s); ctx.lineTo(0,this.s);
+      ctx.stroke();
+      ctx.restore();
+    }else if(theme.effect === 'mist'){
+      const grd=ctx.createRadialGradient(this.x,this.y,0,this.x,this.y,this.s);
+      grd.addColorStop(0,`rgba(${r+80},255,255,${alpha})`);
+      grd.addColorStop(1,'rgba(120,255,255,0)');
+      ctx.fillStyle=grd;
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2); ctx.fill();
+    }else{
+      ctx.beginPath(); ctx.arc(this.x,this.y,this.s,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${r},${g},${b},${alpha})`; ctx.fill();
+    }
+  }
+}
+
+class Wave{
+  constructor(o){ Object.assign(this,o); this.off=rand(0,Math.PI*2); }
+  draw(t){
+    const {r,g,b}=themes[currentTheme];
+    ctx.beginPath();
+    const yb=this.yf*H; ctx.moveTo(0,yb);
+    for(let x=0;x<=W;x+=4){
+      const y=yb+Math.sin(x*this.f1+t*this.s1+this.off)*this.a1+Math.sin(x*this.f2+t*this.s2)*this.a2;
+      ctx.lineTo(x,y);
+    }
+    ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+    ctx.fillStyle=`rgba(${r},${g},${b},${this.op})`; ctx.fill();
+  }
+}
+
+const waves=[
+  new Wave({yf:0.88,f1:0.009,f2:0.016,a1:14,a2:7,s1:0.4,s2:0.7,op:0.03}),
+  new Wave({yf:0.93,f1:0.011,f2:0.02, a1:11,a2:5,s1:0.6,s2:0.5,op:0.045}),
+  new Wave({yf:0.97,f1:0.013,f2:0.022,a1:8, a2:4,s1:0.8,s2:1.0,op:0.065}),
+];
+
+const parts=Array.from({length:100},()=>new Particle());
+const stormClouds=Array.from({length:11},()=>({
+  x:rand(-120,W+120),
+  y:rand(25,H*0.48),
+  w:rand(140,320),
+  h:rand(34,86),
+  speed:rand(0.05,0.22),
+  alpha:rand(0.08,0.22),
+  puff:rand(0,Math.PI*2)
+}));
+
+function drawStormCloud(cloud){
+  const drift=(t*22*cloud.speed) % (W + cloud.w + 260);
+  const x=((cloud.x + drift + 140) % (W + cloud.w + 280)) - cloud.w - 140;
+  const y=cloud.y + Math.sin(t*0.8 + cloud.puff) * 8;
+  const grd=ctx.createRadialGradient(x+cloud.w*0.5,y,0,x+cloud.w*0.5,y,cloud.w*0.75);
+  grd.addColorStop(0,`rgba(70,70,105,${cloud.alpha})`);
+  grd.addColorStop(0.58,`rgba(38,35,65,${cloud.alpha*0.82})`);
+  grd.addColorStop(1,'rgba(18,16,35,0)');
+  ctx.fillStyle=grd;
+
+  ctx.beginPath();
+  ctx.ellipse(x+cloud.w*0.18,y+cloud.h*0.25,cloud.w*0.22,cloud.h*0.55,0,0,Math.PI*2);
+  ctx.ellipse(x+cloud.w*0.38,y,cloud.w*0.3,cloud.h*0.72,0,0,Math.PI*2);
+  ctx.ellipse(x+cloud.w*0.62,y+cloud.h*0.05,cloud.w*0.32,cloud.h*0.68,0,0,Math.PI*2);
+  ctx.ellipse(x+cloud.w*0.82,y+cloud.h*0.24,cloud.w*0.24,cloud.h*0.5,0,0,Math.PI*2);
+  ctx.fill();
+}
+
+function drawStormClouds(){
+  if(themes[currentTheme].effect !== 'storm') return;
+  ctx.save();
+  stormClouds.forEach(drawStormCloud);
+  ctx.restore();
+}
+
+function drawLightning(){
+  if(themes[currentTheme].effect !== 'storm' || Math.random() > 0.025) return;
+  const x=rand(W*0.12,W*0.88);
+  let y=0;
+  ctx.save();
+  ctx.shadowColor='rgba(210,210,255,0.9)';
+  ctx.shadowBlur=22;
+  ctx.strokeStyle='rgba(230,235,255,0.86)';
+  ctx.lineWidth=rand(1.2,2.8);
+  ctx.beginPath();
+  ctx.moveTo(x,y);
+  let lx=x;
+  while(y < H*rand(0.35,0.75)){
+    lx+=rand(-28,28);
+    y+=rand(20,48);
+    ctx.lineTo(lx,y);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+function drawOcean(t){
+  if(themes[currentTheme].effect !== 'ocean') return;
+  ctx.save();
+  for(let layer=0; layer<3; layer++){
+    const yb=H*(0.56+layer*0.1);
+    ctx.beginPath();
+    ctx.moveTo(0,yb);
+    for(let x=0;x<=W;x+=8){
+      const y=yb+Math.sin(x*0.012+t*(1.8+layer*0.4)+layer)*18+Math.sin(x*0.026+t)*7;
+      ctx.lineTo(x,y);
+    }
+    ctx.lineTo(W,H); ctx.lineTo(0,H); ctx.closePath();
+    ctx.fillStyle=`rgba(70,130,230,${0.045+layer*0.025})`;
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawFireGlow(){
+  if(themes[currentTheme].effect !== 'fire') return;
+  const grd=ctx.createRadialGradient(W*0.5,H*1.05,0,W*0.5,H*1.05,H*0.8);
+  grd.addColorStop(0,'rgba(255,80,20,0.22)');
+  grd.addColorStop(0.45,'rgba(200,30,20,0.08)');
+  grd.addColorStop(1,'rgba(200,30,20,0)');
+  ctx.fillStyle=grd;
+  ctx.fillRect(0,0,W,H);
+}
+
+function animate(){
+  t+=0.008;
+  const {r,g,b}=themes[currentTheme];
+  ctx.clearRect(0,0,W,H);
+  const g2=ctx.createLinearGradient(0,0,W,H);
+  g2.addColorStop(0,`rgba(${Math.round(r*0.12)},${Math.round(g*0.12)},${Math.round(b*0.12)},1)`);
+  g2.addColorStop(1,`rgba(${Math.round(r*0.04)},${Math.round(g*0.04)},${Math.round(b*0.04)},1)`);
+  ctx.fillStyle=g2; ctx.fillRect(0,0,W,H);
+  drawFireGlow();
+  drawOcean(t);
+  drawStormClouds();
+  if(themes[currentTheme].effect !== 'ocean') waves.forEach(w=>w.draw(t));
+  parts.forEach(p=>{p.update();p.draw();});
+  drawLightning();
+  requestAnimationFrame(animate);
+}
+animate();
+setTheme(0);
+</script>
+</body>
+</html>
